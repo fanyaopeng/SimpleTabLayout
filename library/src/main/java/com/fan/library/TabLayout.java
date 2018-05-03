@@ -67,7 +67,7 @@ public class TabLayout extends HorizontalScrollView {
             addTab(adapter.getPageTitle(i).toString());
         }
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            int curPos;
+
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -76,18 +76,15 @@ public class TabLayout extends HorizontalScrollView {
                 int right = child.getRight();
                 int targetLeft;
                 int targetRight;
-                View target;
-                if (curPos < position) {
-                    target = mRootContainer.getChildAt(position -1);
-                } else {
-                    target = mRootContainer.getChildAt(position +1);
-                }
-                curPos = position;
+                View target = mRootContainer.getChildAt(position + 1);
                 if (target != null) {
                     targetLeft = target.getLeft();
                     targetRight = target.getRight();
                     mRootContainer.indicatorLeft = (int) (left + (targetLeft - left) * positionOffset);
                     mRootContainer.indicatorRight = (int) (right + (targetRight - right) * positionOffset);
+                    Log.e("main", "left" + mRootContainer.indicatorLeft);
+                    Log.e("main", "right" + mRootContainer.indicatorRight);
+                    Log.e("main", "off" + positionOffset + "targetLeft" + targetLeft + "targetRight" + targetRight);
                     mRootContainer.invalidate();
                 }
             }
@@ -113,7 +110,7 @@ public class TabLayout extends HorizontalScrollView {
         private ValueAnimator mIndicatorAnim;
         int indicatorLeft = 0;
         int indicatorRight = 0;
-        boolean shouldReset=true;
+        boolean shouldReset = true;
 
         public RootContainer(Context context) {
             super(context);
