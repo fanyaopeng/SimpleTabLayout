@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -71,6 +72,16 @@ public class TabLayout extends HorizontalScrollView {
                 View child = mRootContainer.getChildAt(position);
                 int left = child.getLeft();
                 int right = child.getRight();
+                int targetLeft;
+                int targetRight;
+                View target = mRootContainer.getChildAt(position + 1);
+                if (target != null) {
+                    targetLeft = target.getLeft();
+                    targetRight = target.getRight();
+                    mRootContainer.indicatorLeft = (int) (left + (targetLeft - left) * positionOffset);
+                    mRootContainer.indicatorRight = (int) (right + (targetRight - right) * positionOffset);
+                    mRootContainer.invalidate();
+                }
             }
 
             @Override
@@ -94,6 +105,7 @@ public class TabLayout extends HorizontalScrollView {
         private ValueAnimator mIndicatorAnim;
         int indicatorLeft = 0;
         int indicatorRight = 0;
+        boolean shouldReset;
 
         public RootContainer(Context context) {
             super(context);
@@ -110,7 +122,7 @@ public class TabLayout extends HorizontalScrollView {
         protected void dispatchDraw(Canvas canvas) {
             super.dispatchDraw(canvas);
 
-            if (mIndicatorAnim != null && !mIndicatorAnim.isRunning()) {
+            if (shouldReset) {
                 for (int i = 0; i < getChildCount(); i++) {
                     TextView item = (TextView) getChildAt(i);
                     if (pos == i) {
@@ -122,6 +134,7 @@ public class TabLayout extends HorizontalScrollView {
                     }
                     item.setTextColor(pos == i ? mTextSelectColor : mTextColor);
                 }
+                shouldReset = false;
             }
             canvas.drawRect(indicatorLeft, getHeight() - mIndicatorHeight, indicatorRight, getHeight(), mPaint);
         }
@@ -135,6 +148,7 @@ public class TabLayout extends HorizontalScrollView {
                     indicatorLeft = (int) (indicatorLeft + (start - indicatorLeft) * frac);
                     indicatorRight = (int) (indicatorRight + (end - indicatorRight) * frac);
                     invalidate();
+                    if (frac == 1) shouldReset = true;
                 }
             });
             mIndicatorAnim.start();
