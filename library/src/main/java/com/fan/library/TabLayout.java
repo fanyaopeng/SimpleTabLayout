@@ -132,8 +132,8 @@ public class TabLayout extends HorizontalScrollView {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float frac = animation.getAnimatedFraction();
-                    indicatorLeft = indicatorLeft + Math.round((start - indicatorLeft) * frac);
-                    indicatorRight = indicatorRight + Math.round((end - indicatorRight) * frac);
+                    indicatorLeft = (int) (indicatorLeft + (start - indicatorLeft) * frac);
+                    indicatorRight = (int) (indicatorRight + (end - indicatorRight) * frac);
                     invalidate();
                 }
             });
