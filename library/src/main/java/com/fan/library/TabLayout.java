@@ -120,7 +120,7 @@ public class TabLayout extends HorizontalScrollView {
 
             mIndicatorAnim = new ValueAnimator();
             mIndicatorAnim.setDuration(200);
-            mIndicatorAnim.setIntValues(0, 1);
+            mIndicatorAnim.setFloatValues(0, 1f);
         }
 
         @Override
