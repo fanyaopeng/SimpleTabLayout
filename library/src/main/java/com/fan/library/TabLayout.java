@@ -161,12 +161,39 @@ public class TabLayout extends HorizontalScrollView {
 
 
         void addTab(TextView tab) {
-            LayoutParams params = new LayoutParams(-2, -2);
-            params.leftMargin = mTabMargin / 2;
-            params.rightMargin = mTabMargin / 2;
-            params.gravity = Gravity.CENTER_VERTICAL;
-            addView(tab, params);
+//            LayoutParams params = new LayoutParams(-2, -2);
+//            params.leftMargin = mTabMargin / 2;
+//            params.rightMargin = mTabMargin / 2;
+//            params.gravity = Gravity.CENTER_VERTICAL;
+            addView(tab);
             tab.setOnClickListener(this);
+        }
+
+        @Override
+        protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            super.onLayout(changed, l, t, r, b);
+            int count = getChildCount();
+            int parentWidth = TabLayout.this.getWidth();
+            if (getWidth() < parentWidth) {
+                for (int i = 0; i < count; i++) {
+                    TextView tv = (TextView) getChildAt(i);
+                    LinearLayout.LayoutParams params = (LayoutParams) tv.getLayoutParams();
+                    params.gravity = Gravity.CENTER_VERTICAL;
+                    int itemWidth = parentWidth / count;
+                    params.leftMargin = (itemWidth - tv.getWidth()) / 2;
+                    params.rightMargin = (itemWidth - tv.getWidth()) / 2;
+                    tv.setLayoutParams(params);
+                }
+            } else {
+                for (int i = 0; i < count; i++) {
+                    TextView tv = (TextView) getChildAt(i);
+                    LinearLayout.LayoutParams params = (LayoutParams) tv.getLayoutParams();
+                    params.gravity = Gravity.CENTER_VERTICAL;
+                    params.leftMargin =mTabMargin/2;
+                    params.rightMargin = mTabMargin/2;
+                    tv.setLayoutParams(params);
+                }
+            }
         }
 
         @Override

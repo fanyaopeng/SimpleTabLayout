@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tab = findViewById(R.id.tab);
         ViewPager vp = findViewById(R.id.vp);
         fragmentTests = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 20; i++) {
             fragmentTests.add(new FragmentTest());
         }
         vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
             @Nullable
             @Override
             public CharSequence getPageTitle(int position) {
+                if (position > 10)
+                    return "长文本长文本" + position;
                 return "测试" + position;
             }
         });
