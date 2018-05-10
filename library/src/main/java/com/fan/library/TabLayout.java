@@ -81,10 +81,7 @@ public class TabLayout extends HorizontalScrollView {
                     targetLeft = target.getLeft();
                     targetRight = target.getRight();
                     mRootContainer.indicatorLeft = (int) (left + (targetLeft - left) * positionOffset);
-                    mRootContainer.indicatorRight = (int) (right + (targetRight - right) * positionOffset);
-                    Log.e("main", "left" + mRootContainer.indicatorLeft);
-                    Log.e("main", "right" + mRootContainer.indicatorRight);
-                    Log.e("main", "off" + positionOffset + "targetLeft" + targetLeft + "targetRight" + targetRight);
+                    mRootContainer.indicatorRight = mRootContainer.indicatorLeft + mRootContainer.getChildAt(0).getWidth();
                     mRootContainer.invalidate();
                 }
             }
@@ -111,6 +108,7 @@ public class TabLayout extends HorizontalScrollView {
         int indicatorLeft = 0;
         int indicatorRight = 0;
         boolean shouldReset = true;
+        private int mItemWidth;
 
         public RootContainer(Context context) {
             super(context);
@@ -119,8 +117,7 @@ public class TabLayout extends HorizontalScrollView {
             mPaint.setColor(mTabIndicatorColor);
 
             mIndicatorAnim = new ValueAnimator();
-            mIndicatorAnim.setDuration(200);
-            mIndicatorAnim.setFloatValues(0, 1f);
+            mIndicatorAnim.setDuration(500);
         }
 
         @Override
@@ -144,14 +141,17 @@ public class TabLayout extends HorizontalScrollView {
             canvas.drawRect(indicatorLeft, getHeight() - mIndicatorHeight, indicatorRight, getHeight(), mPaint);
         }
 
-        void animIndicator(final int start, final int end) {
-
+        void animIndicator(final int targetLeft, final int targetRight) {
+            mIndicatorAnim.setIntValues(indicatorLeft, targetLeft);
             mIndicatorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float frac = animation.getAnimatedFraction();
-                    indicatorLeft = (int) (indicatorLeft + (start - indicatorLeft) * frac);
-                    indicatorRight = (int) (indicatorRight + (end - indicatorRight) * frac);
+//                    indicatorLeft = (indicatorLeft + Math.round((targetLeft - indicatorLeft) * frac));
+//                    indicatorRight = (indicatorRight + Math.round((targetRight - indicatorRight) * frac));
+//                    Log.e("main",   "frac  "+frac+"  indicatorLeft:  " + indicatorLeft + "   indicatorRight" + indicatorRight);
+                    indicatorLeft = (int) animation.getAnimatedValue();
+                    indicatorRight = indicatorLeft + getChildAt(0).getWidth();
                     invalidate();
                     if (frac == 1) shouldReset = true;
                 }
