@@ -81,7 +81,7 @@ public class TabLayout extends HorizontalScrollView {
                     targetLeft = target.getLeft();
                     targetRight = target.getRight();
                     mRootContainer.indicatorLeft = (int) (left + (targetLeft - left) * positionOffset);
-                    mRootContainer.indicatorRight = mRootContainer.indicatorLeft + mRootContainer.getChildAt(0).getWidth();
+                    mRootContainer.indicatorRight = mRootContainer.indicatorLeft + mRootContainer.getChildAt(mRootContainer.pos).getWidth();
                     mRootContainer.invalidate();
                 }
             }
@@ -151,7 +151,7 @@ public class TabLayout extends HorizontalScrollView {
 //                    indicatorRight = (indicatorRight + Math.round((targetRight - indicatorRight) * frac));
 //                    Log.e("main",   "frac  "+frac+"  indicatorLeft:  " + indicatorLeft + "   indicatorRight" + indicatorRight);
                     indicatorLeft = (int) animation.getAnimatedValue();
-                    indicatorRight = indicatorLeft + getChildAt(0).getWidth();
+                    indicatorRight = indicatorLeft + getChildAt(pos).getWidth();
                     invalidate();
                     if (frac == 1) shouldReset = true;
                 }
